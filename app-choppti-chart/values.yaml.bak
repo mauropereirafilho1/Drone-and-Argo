@@ -3,7 +3,7 @@ ti:
   choppti:
     image:
       repository: pereirafmauro/choppti
-      tag:350d6a6270bfb27a84ab46f5aaa808420fc6652e
+      tag: latest
   ports:
   - port: 80
     targetPort: 0
