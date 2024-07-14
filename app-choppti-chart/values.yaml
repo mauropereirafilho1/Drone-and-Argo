@@ -1,0 +1,11 @@
+kubernetesClusterDomain: cluster.local
+ti:
+  choppti:
+    image:
+      repository: pereirafmauro/choppti
+      tag: latest
+  ports:
+  - port: 80
+    targetPort: 0
+  replicas: 2
+  type: ClusterIP
