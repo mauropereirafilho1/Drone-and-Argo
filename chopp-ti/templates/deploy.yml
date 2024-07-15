@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: chopp-ti
+  name: chopp-ti
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chopp-ti
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: chopp-ti
+    spec:
+      containers:
+      - image: pereirafmauro/choppti:latest
+        name: choppti

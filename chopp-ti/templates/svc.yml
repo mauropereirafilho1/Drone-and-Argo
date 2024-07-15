@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: chopp-ti
+  name: chopp-ti
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: chopp-ti
