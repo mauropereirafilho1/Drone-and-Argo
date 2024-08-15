@@ -16,5 +16,5 @@ spec:
         app: chopp-ti
     spec:
       containers:
-      - image: pereirafmauro/choppti:8c3cba030594f9bebe5d8805530d2fa1d4c7060a
+      - image: pereirafmauro/choppti:48666d5210606469f1de2908a053253a71fb22d1
         name: choppti
