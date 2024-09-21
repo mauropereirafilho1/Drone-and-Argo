@@ -8,7 +8,7 @@ hostAliases: []
 image:
   registry: docker.io
   repository: drone/drone
-  tag: 2.12.1
+  tag: 2.24.0
   pullPolicy: IfNotPresent
 
 ## If you need to pull images from a private Docker image repository, pass in the name
@@ -187,15 +187,15 @@ env:
   ## REQUIRED: Set the user-visible Drone hostname, sans protocol.
   ## Ref: https://docs.drone.io/installation/reference/drone-server-host/
   ##
-  DRONE_SERVER_HOST: "drone.techub.com"
+  DRONE_SERVER_HOST: #"URL-SERVER-USADO-NO-OAUTH"
   ## The protocol to pair with the value in DRONE_SERVER_HOST (http or https).
   ## Ref: https://docs.drone.io/installation/reference/drone-server-proto/
   ##
   DRONE_SERVER_PROTO: http
-  DRONE_USER_CREATE: username:mauropereirafilho1,admin:true
-  DRONE_USER_FILTER: mauropereirafilho1
+  DRONE_USER_CREATE: username:#USUARIO-GITHUB,admin:true
+  DRONE_USER_FILTER: #USUARIO-GITHUB
   DRONE_WEBHOOK_DEBUG: "true"
-  DRONE_WEBHOOK_URL: "https://discord.com/api/webhooks/1261804379166740521/AUePsMgaol3N1fpuInkgXP-vyW_7R_N29b4i9Z9uH8y2H1XxVkzHPQ26xQTzORo327fR"
+  DRONE_WEBHOOK_URL: #"URL-WEBHOOK-DISCORD"
 
   ## REQUIRED: Set the secret secret token that the Drone server and its Runners will use
   ## to authenticate. This is commented out in order to leave you the ability to set the

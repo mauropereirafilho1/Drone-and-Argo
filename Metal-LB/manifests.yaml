@@ -1,0 +1,16 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: example
+  namespace: metallb-system
+spec:
+  addresses:
+  - #Insira sua faixa de IP da sua rede Docker, para averiguar usa o comando ipconfig e aveiguar a faixa da interface docker0. No meu caso --> (172.20.0.200-172.20.0.220)
+
+---
+
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: example
+  namespace: metallb-system

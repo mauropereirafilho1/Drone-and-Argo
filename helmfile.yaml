@@ -5,6 +5,12 @@ repositories:
 - name: drone
   url: https://charts.drone.io
 
+- name: drone-runner-docker
+  url: https://charts.drone.io
+
+- name: drone-runner-kube
+  url: https://charts.drone.io
+
 - name: argo
   url: https://argoproj.github.io/argo-helm
 
@@ -15,7 +21,7 @@ releases:
     chart: ingress-nginx/ingress-nginx
     version: 4.10.1
     values:
-      - values/ingress-nginx/values.yml
+      - Values/Ingress-Nginx/values.yml
   
   - name: drone
     namespace: drone 
@@ -23,4 +29,28 @@ releases:
     chart: drone/drone
     version: 0.6.5
     values:
-      - values/Drone/drone-server/values.yml
+      - Values/Drone/drone-server/values.yaml
+  
+  - name: drone-runner-kube
+    namespace: drone 
+    createNamespace: true  
+    chart: drone/drone-runner-kube
+    version: 0.1.10
+    values:
+      - Values/Drone/drone-runner-kube/values.yaml
+
+  - name: drone-runner-docker
+    namespace: drone 
+    createNamespace: true  
+    chart: drone/drone-runner-docker
+    version: 0.6.2
+    values:
+      - Values/Drone/drone-runner-docker/values.yaml
+
+  - name: argo
+    namespace: argo
+    createNamespace: true  
+    chart: argo/argo-cd
+    version: 7.3.6
+    values:
+      - Values/Argocd/values.yml

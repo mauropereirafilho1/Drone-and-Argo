@@ -18,7 +18,14 @@ image:
   repository: drone/drone-runner-docker
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.8.1
+  tag: 1.8.3
+
+initContainers:
+  enabled: true
+  sysctl:
+    command: ["sh", "-c", "sysctl -w fs.inotify.max_user_watches=2099999999 && sysctl -w fs.inotify.max_user_instances=2099999999 && sysctl -w fs.inotify.max_queued_events=2099999999"]
+    image: busybox
+    privileged: true
 
 ## If you'd like to make additional files or volumes available to the runner, declare additional
 ## Volumes here per the Pod spec's "volumes" section of the dind container
