@@ -108,7 +108,7 @@ kubectl -n argo get secret argocd-initial-admin-secret -o jsonpath="{.data.passw
 kubectl create -f Roles/.
 ```
 - Um exemplo de pipeline do Drone, está dentro da pasta Drone-pipeline. O nome do arquivo é ***.drone.yaml***, e ele deve estar na raiz do seu repositório que realiza a etapa de CI. Este repositório deve ser referente a conta no qual criamos o ***OAuth Application*** conforme o passo 3.
-- O Argo-CD realiza a leitura deploy a partir de manifestos Kubernetes, ou Helmcharts, presentes em um repositório.
+- O Argo-CD realiza a leitura deploy a partir de manifestos Kubernetes, ou Helmcharts, presentes em um repositório. Caso tenha problemas para criar um helmchart, utilize a ferramenta [Helmify](https://github.com/arttor/helmify) para criação a partir de seus manifestos Kubernetes.
 
 
 ## Links de Referência
