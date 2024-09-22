@@ -45,22 +45,10 @@ steps:
       from_secret: webhook_token
     message: >
       {{#success build.status}}
-        Imagem enviada para o registry com sucesso ! Imagem pereirafmauro/choppti:${DRONE_COMMIT}
+        Imagem enviada para o registry com sucesso ! Imagem SUA-IMAGEM:${DRONE_COMMIT}
       {{else}}
         Erro no envio da imagem para o registry !
         {{/success}}
-
-- name: Commit and changes to the CD repo
-  image: pereirafmauro/choppti-commiter:latest
-  commands:
-  - cd /root/cd-choppti
-  - git pull
-  - cd chopp-ti/templates
-  - sed -E -i.bak 's%(SUA-IMAGEM-DOCKER:).*%SUA-IMAGEM-DOCKER:${DRONE_COMMIT}%' deploy.yml
-  - git status
-  - git add .
-  - git commit -m "Atualizando a imagem do chart com a imagem SUA-IMAGEM-DOCKER:${DRONE_COMMIT}"
-  - git push
 
 - name: Termination Notification pipeline
   image: appleboy/drone-discord
