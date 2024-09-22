@@ -1,16 +1,16 @@
 # Drone-&-Argo
 
-Este projeto consiste em subir uma stack do Drone CI e Argo CD de maneira em um cluster Kubernetes. As ferramentas utilizadas para o funcionamento correto da stack são:
+Este projeto consiste em subir uma stack do ***Drone CI*** e ***Argo CD*** de maneira automatizada em um cluster Kubernetes. As ferramentas utilizadas para o funcionamento correto da stack são:
 
 ## Pré-Requisitos
 
 Para executar este projeto, certifique-se de ter as seguintes ferramentas instaladas:
 
-- [Kind](https://kind.sigs.k8s.io/)
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Helm](https://helm.sh/docs/intro/install/)
-- [Metal-LB](https://metallb.universe.tf/installation/)
-- [Helmfile](https://helmfile.readthedocs.io/en/latest/#getting-started)
+- [Kind](https://kind.sigs.k8s.io/) --> Para criação do cluster Kubernetes.
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/) --> Para criação e execução de manifestos no cluster.
+- [Helm](https://helm.sh/docs/intro/install/) --> Para criação e instalação de helmcharts.
+- [Metal-LB](https://metallb.universe.tf/installation/) --> Para recebermos um External-IP para nossos services LoadBalancer e nossos Ingress
+- [Helmfile](https://helmfile.readthedocs.io/en/latest/#getting-started) --> Para instalação de todos os helmcharts de forma automatizada e versionada.
 
 ## Como rodar o projeto ?
 
@@ -25,7 +25,7 @@ A explicação de cada passo do projeto, vai estar listada de forma detalhada, �
 
 ## Passo 2
 
-Após ter instalado o [Metal-LB](https://metallb.universe.tf/installation/) no cluster, acesso o arquivo [manifests.yaml](Metal-LB/manifests.yaml) , e edite a linha 8, conforme a orientação do comentário. Após realizado o procedimento, execute o comando:
+Após ter instalado o [Metal-LB](https://metallb.universe.tf/installation/) no cluster, acesso o arquivo [manifests.yaml](Metal-LB/manifests.yaml) , e edite a ***linha 8***, conforme a orientação do comentário. Após realizado o procedimento, execute o comando:
 
 ```bash
 kubectl create -f Metal-LB/manifests.yaml
@@ -33,14 +33,14 @@ kubectl create -f Metal-LB/manifests.yaml
 
 ## Passo 3
 
-Crie um GitHub OAuth Application. A Consumer Key e a Consumer Secret são usadas para autorizar o acesso aos recursos do GitHub. A URL de retorno de chamada de autorização deve corresponder ao formato e caminho abaixo, e deve usar seu esquema de servidor e host exatos.
+Crie um GitHub ***OAuth Application***. A ***Consumer Key*** e a ***Consumer Secret*** são usadas para autorizar o acesso aos recursos do GitHub. A URL de retorno de chamada de autorização deve corresponder ao formato e caminho abaixo, e deve usar seu esquema de servidor e host exatos.
 
 ![Descrição da imagem 1](.imagens/github_application_create.png)
 ![Descrição da imagem 2](./.imagens/github_application_created.png)
 
-O campo HOMEPAGE_URL, deve ser preenchido com a URL que você deseja utilizar para acessar seu Drone. Você pode utilizar qualquer URL, e depois seguir o passo 6 criando um Ingress de acesso, ou utilizar a ferramenta [Ngrok](https://ngrok.com/), para gerar uma URL de espelhamento específica para sua máquina.
+O campo ***HOMEPAGE_URL***, deve ser preenchido com a URL que você deseja utilizar para acessar seu Drone. Você pode utilizar qualquer URL, e depois seguir o passo 6 criando um Ingress de acesso, ou utilizar a ferramenta [Ngrok](https://ngrok.com/), para gerar uma URL de espelhamento específica para sua máquina.
 
-Após termos criado o OAuth Application, precismos criar um shared secret para autenticar a comunicação entre os Runners (serão instalados e utilizados no projeto de forma automatizada) e seu servidor Drone central. Para gerar um shared secret, utilizaremos o comando openssl, citado à baixo:
+Após termos criado o ***OAuth Application***, precismos criar um shared secret para autenticar a comunicação entre os Runners (serão instalados e utilizados no projeto de forma automatizada) e seu servidor Drone central. Para gerar um shared secret, utilizaremos o comando openssl, citado à baixo:
 
 ```bash
 openssl rand -hex 16
@@ -48,7 +48,7 @@ openssl rand -hex 16
 
 ## Passo 4
 
-Crie um secret, utilizando o client e secret ID da sua conta do Github, que fora gerado atraves do OAuth Application. Comando para gerar o secret, esta citado à baixo:
+Crie um secret, utilizando o client e secret ID da sua conta do Github, que fora gerado através do ***OAuth Application***. Comando para gerar o secret, esta citado à baixo:
 
 ```bash
 kubectl create secret my-drone-secret generic \
@@ -64,7 +64,7 @@ Lembrando que as variaveis devem ser alterados IDs gerados pelo OAuth da sua con
 
 ## Passo 5
 
-No arquivo [values.yaml](Values/Drone/drone-server/values.yaml), referente ao nosso Drone-Server, precisamos alterar as linhas 195, e 196. Caso deseja realizar uma integração de wehook do Discord, alterar a linha 198 com a URL do webhook.
+No arquivo [values.yaml](Values/Drone/drone-server/values.yaml), referente ao nosso ***Drone-Server***, precisamos alterar as linhas ***195***, e ***196***. Caso deseja realizar uma integração de wehook do Discord, alterar a linha ***198*** com a URL do webhook.
 
 ## Passo 6
 
@@ -103,3 +103,18 @@ k port-forward svc/argo-argocd-server PORTA-QUE-DESEJA-UTILIZAR-NA-SUA-MAQUINA:8
 kubectl -n argo get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 - Em cada arquivo values.yml na pasta Values, há um campo ***extraSecretNamesForEnvFrom***, referenciando um secret com o nome ***my-drone-secrets***. Esta opção nunca deve estar comentada, pois ela garante que o Drone, e os Runners, peguem todas as variaveis setadas no secret, criado no passo 4.
+- Caso tenha algum problema autorização do Drone dentro do cluster, instale as roles que estão na pasta ***Roles***, para dar permissionamento total do Drone dentro do cluster. O comando para instalação é:
+```bash
+kubectl create -f Roles/.
+```
+- Um exemplo de pipeline do Drone, está dentro da pasta Drone-pipeline. O nome do arquivo é ***.drone.yaml***, e ele deve estar na raiz do seu repositório que realiza a etapa de CI. Este repositório deve ser referente a conta no qual criamos o ***OAuth Application*** conforme o passo 3.
+- O Argo-CD realiza a leitura deploy a partir de manifestos Kubernetes, ou Helmcharts, presentes em um repositório.
+
+
+## Links de Referência
+
+- [Drone](https://www.drone.io/)
+- [Argo](https://argo-cd.readthedocs.io/en/stable/getting_started/)
+- [Canal do Uziel](https://www.youtube.com/watch?v=XenpR5psXS4) 
+
+
